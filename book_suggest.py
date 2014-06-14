@@ -1,19 +1,12 @@
 from flask import Flask, render_template, redirect, url_for
 from models.models import *
 from src import repositories
-import copy
+from functions.matchingfunction import get_recommended_books
 app = Flask(__name__)
 
 
 books_repo = repositories.BooksRepository()
 users_repo = repositories.UsersRepository()
-
-
-def get_recommended_books(utente):
-    own_books = [(book.title, book.score, book.category) for book in utente.books_read]
-    following = [user for user in utente.users_followed]
-    books_from_followers = [user.books_read for user in following]
-    return sum(books_from_followers, [])
 
 
 @app.route('/ping')
@@ -25,13 +18,10 @@ def hello_world_endpoint():
 def user_page(username):
     user = users_repo.get_user(username)
     if user:
-        recommend = get_recommended_books(user)
-        print recommend
-        if len(recommend) > 0:
-            return render_template('user.html', user=user, allusers=users_repo.users,
-                                   allbooks=get_recommended_books(user))
-        else:
-            return render_template('user.html', user=user, allusers=users_repo.users, allbooks=books_repo.books)
+        return render_template('user.html',
+                               user=user,
+                               allusers=users_repo.users,
+                               allbooks=books_repo.books)
     else:
         return render_template('error.html')
 
@@ -48,8 +38,7 @@ def user_follows(username, anotheruser):
 def user_reads(username, bookisbn):
     first_user = users_repo.get_user(username)
     book = books_repo.query_book_isbn(bookisbn)
-    user_book = copy.deepcopy(book)
-    first_user.reads(user_book)
+    first_user.reads(book)
     return redirect(url_for('user_page', username=username))
 
 
@@ -66,6 +55,7 @@ def rate_a_book(username, isbn, rating):
     book.assign_rating(rating)
     return redirect(url_for('user_page', username=user.username))
 
+
 if __name__ == '__main__':
     app.debug = True
 
@@ -76,8 +66,8 @@ if __name__ == '__main__':
              Book(isbn="9788866546568", title="Le Petit Prince", category="Children"),
              Book(isbn="9788866546786", title="Cancer Tropic", description="Lorem ipsum...", category="Fiction"),
              Book(isbn="97888663456467", title="Scorpion Tropic", description="Lorem ipsum...", category="Crime"),
-             Book(isbn="9788866546566", title="The Most Beautiful Book in The World", description="Lorem ipsum...", category="Romance")
-            ]
+             Book(isbn="9788866546566", title="The Most Beautiful Book in The World", description="Lorem ipsum...",
+                  category="Romance")]
 
     for book in books:
         books_repo.books.append(book)
