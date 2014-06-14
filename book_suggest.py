@@ -8,11 +8,12 @@ app = Flask(__name__)
 books_repo = repositories.BooksRepository()
 users_repo = repositories.UsersRepository()
 
+
 def get_recommended_books(utente):
     own_books = [(book.title, book.score, book.category) for book in utente.books_read]
-    others_books = [[(book.title, book.score, book.category) for book in user.books_read] for user in [user for user in utente.users_followed]]
-    return others_books
-
+    following = [user for user in utente.users_followed]
+    books_from_followers = [user.books_read for user in following]
+    return sum(books_from_followers, [])
 
 
 @app.route('/ping')
@@ -23,10 +24,14 @@ def hello_world_endpoint():
 @app.route('/user/<username>', methods=["GET", "POST"])
 def user_page(username):
     user = users_repo.get_user(username)
-
-    print get_recommended_books(user)
     if user:
-        return render_template('user.html', user=user, allusers=users_repo.users, allbooks=books_repo.books)
+        recommend = get_recommended_books(user)
+        print recommend
+        if len(recommend) > 0:
+            return render_template('user.html', user=user, allusers=users_repo.users,
+                                   allbooks=get_recommended_books(user))
+        else:
+            return render_template('user.html', user=user, allusers=users_repo.users, allbooks=books_repo.books)
     else:
         return render_template('error.html')
 
