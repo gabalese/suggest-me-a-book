@@ -11,6 +11,24 @@ users_repo = repositories.UsersRepository()
 
 @app.route('/ping')
 def hello_world_endpoint():
+    # BEGIN MOCK USERS
+    users = [User(name) for name in ["Tom", "John", "Mike"]]
+    books = [Book(isbn="9788866543256", title="The Catcher in the Rye", category="Fiction"),
+             Book(isbn="9788866546567", title="Cinderella", category="Children"),
+             Book(isbn="9788866546568", title="Le Petit Prince", category="Children"),
+             Book(isbn="9788866546786", title="Cancer Tropic", description="Lorem ipsum...", category="Fiction"),
+             Book(isbn="97888663456467", title="Scorpion Tropic", description="Lorem ipsum...", category="Crime"),
+             Book(isbn="9788866546566", title="The Most Beautiful Book in The World", description="Lorem ipsum...",
+                  category="Romance")]
+
+    for book in books:
+        books_repo.books.append(book)
+
+    for user in users:
+        users_repo.add_user(user)
+
+    # MIKE READS TWO BOOKS
+    mike = users_repo.get_user("Mike")
     return render_template('main.html', title="Main", content="Pong?")
 
 
@@ -72,24 +90,4 @@ def rate_a_book(username, isbn, rating):
 
 if __name__ == '__main__':
     app.debug = True
-
-    # BEGIN MOCK USERS
-    users = [User(name) for name in ["Tom", "John", "Mike"]]
-    books = [Book(isbn="9788866543256", title="The Catcher in the Rye", category="Fiction"),
-             Book(isbn="9788866546567", title="Cinderella", category="Children"),
-             Book(isbn="9788866546568", title="Le Petit Prince", category="Children"),
-             Book(isbn="9788866546786", title="Cancer Tropic", description="Lorem ipsum...", category="Fiction"),
-             Book(isbn="97888663456467", title="Scorpion Tropic", description="Lorem ipsum...", category="Crime"),
-             Book(isbn="9788866546566", title="The Most Beautiful Book in The World", description="Lorem ipsum...",
-                  category="Romance")]
-
-    for book in books:
-        books_repo.books.append(book)
-
-    for user in users:
-        users_repo.add_user(user)
-
-    # MIKE READS TWO BOOKS
-    mike = users_repo.get_user("Mike")
-
     app.run()

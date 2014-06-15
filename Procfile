@@ -1,1 +1,1 @@
-web: gunicorn --debug book_suggest:app
+web: gunicorgit n --debug book_suggest:app
