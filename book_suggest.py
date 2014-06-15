@@ -23,9 +23,6 @@ def user_page(username):
     for item in potentialbooks:
         if item not in output and item not in user.books_read:
             output.append(item)
-
-    print output
-
     if len(output) == 0:
         potentialbooks = books_repo.books
     else:
@@ -45,6 +42,7 @@ def user_follows(username, anotheruser):
     first_user = users_repo.get_user(username)
     second_user = users_repo.get_user(anotheruser)
     first_user.follows(second_user)
+    first_user.increment_score(1)
     return redirect(url_for('user_page', username=username))
 
 
@@ -53,6 +51,7 @@ def user_reads(username, bookisbn):
     first_user = users_repo.get_user(username)
     book = books_repo.query_book_isbn(bookisbn)
     first_user.reads(book)
+    first_user.increment_score(2)
     return redirect(url_for('user_page', username=username))
 
 
@@ -67,6 +66,7 @@ def rate_a_book(username, isbn, rating):
     user = users_repo.get_user(username)
     book = user.get_book_by_isbn(isbn)
     book.assign_rating(rating)
+    user.increment_score(5)
     return redirect(url_for('user_page', username=user.username))
 
 
