@@ -11,8 +11,6 @@ users_repo = repositories.UsersRepository()
 
 @app.route('/ping')
 def hello_world_endpoint():
-
-
     return render_template('main.html', title="Main", content="Pong?")
 
 
