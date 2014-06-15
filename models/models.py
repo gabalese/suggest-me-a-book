@@ -17,6 +17,7 @@ class Book(object):
 class User(object):
     def __init__(self, name):
         self.username = name
+        self.score = 0
         self.books_read = []
         self.users_followed = []
 
@@ -34,8 +35,5 @@ class User(object):
         self.books_read.append(book)
         book.add_reader(self)
 
-    def get_recommended_books(self):
-        ultimolibroletto = self.books_read[-1]
-        for utente in self.users_followed:
-            if ultimolibroletto in utente.books_read:
-                pass
+    def increment_score(self, score):
+        self.score = self.score + score

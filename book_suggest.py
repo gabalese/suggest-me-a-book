@@ -21,7 +21,7 @@ def user_page(username):
     potentialbooks = sorted(sum(get_recommended_books(user), []), key=lambda x: x.score, reverse=True)
     output = []
     for item in potentialbooks:
-        if item not in output:
+        if item not in output and item not in user.books_read:
             output.append(item)
 
     print output
