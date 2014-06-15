@@ -2,6 +2,7 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -44,7 +45,9 @@
             <h2>Users you might be interested in</h2>
             <ul>
                 {% for each_user in allusers %}
-                    <li><a href="{{ user.username }}/follow/{{ each_user.username }}">{{ each_user.username }}</a></li>
+                    <li>{{ each_user.username }}
+                        <a title="Follow the user {{ each_user.username }}" href="{{ user.username }}/follow/{{ each_user.username }}"><span class="glyphicon glyphicon-star"></span></a>
+                    </li>
                 {% endfor %}
             </ul>
         </div>
@@ -56,15 +59,31 @@
             {% for each_book in allbooks %}
                 <li>
                     <a href="/book/{{ each_book.isbn }}">{{ each_book.title }}</a>
-                    <a href="{{ user.username }}/read/{{ each_book.isbn }}">[read this]</a>
 
-                    <a href="{{ user.username }}/rate/{{ each_book.isbn }}/1">[1]</a>
-                    <a href="{{ user.username }}/rate/{{ each_book.isbn }}/2">[2]</a>
-                    <a href="{{ user.username }}/rate/{{ each_book.isbn }}/3">[3]</a>
-                    <a href="{{ user.username }}/rate/{{ each_book.isbn }}/4">[4]</a>
-                    <a href="{{ user.username }}/rate/{{ each_book.isbn }}/5">[5]</a>
+                    <a href="{{ user.username }}/read/{{ each_book.isbn }}"><span class="glyphicon glyphicon-plus"></span></a>
 
-
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                            Rate! <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="{{ user.username }}/rate/{{ each_book.isbn }}/1">1</a>
+                            </li>
+                            <li>
+                                <a href="{{ user.username }}/rate/{{ each_book.isbn }}/2">1</a>
+                            </li>
+                            <li>
+                                <a href="{{ user.username }}/rate/{{ each_book.isbn }}/3">3</a>
+                            </li>
+                            <li>
+                                <a href="{{ user.username }}/rate/{{ each_book.isbn }}/4">4</a>
+                            </li>
+                            <li>
+                                <a href="{{ user.username }}/rate/{{ each_book.isbn }}/5">5</a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
             {% endfor %}
         </ul>

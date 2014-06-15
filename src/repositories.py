@@ -21,7 +21,6 @@ class UsersRepository(object):
         for user in self.users:
             if user.username == username:
                 return user
-        raise AssertionError
 
     def add_user(self, username):
         self.users.append(username)
