@@ -45,7 +45,7 @@
             <h2>Users you might be interested in</h2>
             <ul>
                 {% for each_user in allusers %}
-                    <li>{{ each_user.username }}
+                    <li><a href="/user/{{ each_user.username }}">{{ each_user.username }}</a>
                         <a title="Follow the user {{ each_user.username }}" href="{{ user.username }}/follow/{{ each_user.username }}"><span class="glyphicon glyphicon-star"></span></a>
                     </li>
                 {% endfor %}
@@ -56,7 +56,7 @@
     <div class="row suggestedbooks">
         <h2>Books you could find interesting to read</h2>
         <ul>
-            {% for each_book in allbooks %}
+            {% for each_book in potentialbooks %}
                 <li>
                     <a href="/book/{{ each_book.isbn }}">{{ each_book.title }}</a>
 
@@ -71,7 +71,7 @@
                                 <a href="{{ user.username }}/rate/{{ each_book.isbn }}/1">1</a>
                             </li>
                             <li>
-                                <a href="{{ user.username }}/rate/{{ each_book.isbn }}/2">1</a>
+                                <a href="{{ user.username }}/rate/{{ each_book.isbn }}/2">2</a>
                             </li>
                             <li>
                                 <a href="{{ user.username }}/rate/{{ each_book.isbn }}/3">3</a>

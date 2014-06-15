@@ -17,11 +17,25 @@ def hello_world_endpoint():
 @app.route('/user/<username>', methods=["GET", "POST"])
 def user_page(username):
     user = users_repo.get_user(username)
+
+    potentialbooks = sorted(sum(get_recommended_books(user), []), key=lambda x: x.score, reverse=True)
+    output = []
+    for item in potentialbooks:
+        if item not in output:
+            output.append(item)
+
+    print output
+
+    if len(output) == 0:
+        potentialbooks = books_repo.books
+    else:
+        potentialbooks = output
+
     if user:
         return render_template('user.html',
                                user=user,
                                allusers=users_repo.users,
-                               allbooks=books_repo.books)
+                               potentialbooks=potentialbooks)
     else:
         return render_template('error.html')
 
