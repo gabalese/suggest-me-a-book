@@ -92,4 +92,4 @@ if __name__ == '__main__':
     # MIKE READS TWO BOOKS
     mike = users_repo.get_user("Mike")
 
-    app.run()
+    app.run(port=6667)
